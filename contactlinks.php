@@ -17,6 +17,27 @@
 require_once 'contactlinks.civix.php';
 use CRM_Contactlinks_ExtensionUtil as E;
 
+function contactlinks_civicrm_custom( $op, $groupID, $entityID, &$params ) {
+  if ($op == 'create') {
+    // set creator ID and create data
+    // fixme: is there a way to get the civicrm_value_contact_link.id?
+    $creator_id = (int) CRM_Core_Session::getLoggedInContactID();
+    if ($creator_id) {
+      CRM_Core_DAO::executeQuery("
+        UPDATE civicrm_value_contact_link
+        SET create_contact_id = %1
+        WHERE create_contact_id IS NULL
+          AND entity_id = %2;", [1 => [$creator_id, 'Integer'], 2 => [$entityID, 'Integer']]);
+    }
+
+    CRM_Core_DAO::executeQuery("
+        UPDATE civicrm_value_contact_link
+        SET create_date = NOW()
+        WHERE create_date IS NULL
+          AND entity_id = %1;", [1 => [$entityID, 'Integer']]);
+  }
+}
+
 /**
  * Implements hook_civicrm_config().
  *
