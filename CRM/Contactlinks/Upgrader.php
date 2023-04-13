@@ -19,7 +19,7 @@ use CRM_Contactlinks_ExtensionUtil as E;
 /**
  * Collection of upgrade steps.
  */
-class CRM_Contactlinks_Upgrader extends CRM_Contactlinks_Upgrader_Base {
+class CRM_Contactlinks_Upgrader extends CRM_Extension_Upgrader_Base {
 
   /**
    * Installer
